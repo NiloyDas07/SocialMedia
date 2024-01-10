@@ -2,3 +2,22 @@
   margin: 0;
   padding: 0;
 }
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-container {
+  display: flex;
+  flex-grow: 1;
+}
+
+.content-container {
+  width: 100%;
+}
+
+.flex-grow-class {
+  flex-grow: 1;
+}
