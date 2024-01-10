@@ -21,3 +21,10 @@
 .flex-grow-class {
   flex-grow: 1;
 }
+
+.post-list {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
