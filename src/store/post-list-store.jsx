@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer } from "react";
 
 export const PostList = createContext({
   connect: () => {},
@@ -74,17 +74,9 @@ export default function PostListProvider({ children }) {
     });
   };
 
-  const handleConnectClick = () => {
-    fetch("https://dummyjson.com/posts")
-      .then((res) => res.json())
-      .then((data) => {
-        connect(data.posts);
-      });
-  };
-
   return (
     <PostList.Provider
-      value={{ handleConnectClick, postList, addPost, deletePost, addLike }}
+      value={{ connect, postList, addPost, deletePost, addLike }}
     >
       {children}
     </PostList.Provider>

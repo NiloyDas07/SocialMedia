@@ -47,3 +47,10 @@
   align-items: center;
   gap: 10px;
 }
+
+.loading-spinner {
+  margin-top: 15%;
+  align-self: center;
+  width: 5rem;
+  height: 5rem;
+}
