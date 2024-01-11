@@ -5,7 +5,7 @@ import { PostList } from "../store/post-list-store";
 export default function Post({ post }) {
   const { deletePost, addLike } = useContext(PostList);
 
-  const handleClick = () => {}
+  const handleClick = () => {};
 
   return (
     <center>
@@ -16,7 +16,7 @@ export default function Post({ post }) {
           <h5 className="card-title">
             {post.title}
             <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-              {post.likes}
+              {post.reactions}
             </span>
             <span
               className="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-light"

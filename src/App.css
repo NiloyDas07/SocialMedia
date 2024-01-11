@@ -15,6 +15,8 @@
 }
 
 .content-container {
+  display: flex;
+  flex-direction: column;
   width: 100%;
 }
 
@@ -32,4 +34,16 @@
 
 .create-post-form {
   padding: 20px;
+}
+
+.welcome-msg {
+  padding: 10px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }

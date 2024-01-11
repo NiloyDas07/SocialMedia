@@ -1,26 +1,7 @@
 import { createContext, useReducer } from "react";
 
-const DEFAULT_POST_LIST = [
-  {
-    id: 1,
-    img: "https://getwallpapers.com/wallpaper/full/b/4/e/1040296-nice-wallpapers-images-1920x1200-ipad-retina.jpg",
-    title: "First Post",
-    body: "Hi! This is my first post.",
-    likes: 0,
-    userID: "ABC",
-    tags: ["fisrtpost", "Hi"],
-  },
-  {
-    id: 2,
-    title: "Second Post",
-    body: "Hi! This is my second post.",
-    likes: 500,
-    userID: "ABC",
-    tags: ["secondpost", "Hi"],
-  },
-];
-
 export const PostList = createContext({
+  connect: () => {},
   postList: [],
   addPost: () => {},
   deletePost: () => {},
@@ -39,24 +20,30 @@ const postListReducer = (currPostList, action) => {
     const id = currPostList[currPostList.length - 1].id + 1;
     const newPost = action.payload;
     newPost.id = id;
-    newPost.likes = 0;
+    newPost.reactions = 0;
     newPostList = [newPost, ...currPostList];
   } else if (action.type === "ADD_LIKE") {
     for (let i = 0; i < newPostList.length; i++) {
       if (action.payload.postID === newPostList[i].id) {
-        newPostList[i].likes = newPostList[i].likes + 1;
+        newPostList[i].reactions = newPostList[i].reactions + 1;
       }
     }
+  } else if ((action.type = "FETCH_POST_LIST")) {
+    newPostList = action.payload.posts;
   }
 
   return newPostList;
 };
 
 export default function PostListProvider({ children }) {
-  const [postList, dispatchPostList] = useReducer(
-    postListReducer,
-    DEFAULT_POST_LIST
-  );
+  const [postList, dispatchPostList] = useReducer(postListReducer, []);
+
+  const connect = (posts) => {
+    dispatchPostList({
+      type: "FETCH_POST_LIST",
+      payload: { posts },
+    });
+  };
 
   const addPost = (postTitle, postBody, tags) => {
     dispatchPostList({
@@ -87,8 +74,18 @@ export default function PostListProvider({ children }) {
     });
   };
 
+  const handleConnectClick = () => {
+    fetch("https://dummyjson.com/posts")
+      .then((res) => res.json())
+      .then((data) => {
+        connect(data.posts);
+      });
+  };
+
   return (
-    <PostList.Provider value={{ postList, addPost, deletePost, addLike }}>
+    <PostList.Provider
+      value={{ handleConnectClick, postList, addPost, deletePost, addLike }}
+    >
       {children}
     </PostList.Provider>
   );
