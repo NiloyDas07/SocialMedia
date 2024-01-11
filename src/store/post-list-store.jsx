@@ -24,22 +24,29 @@ export const PostList = createContext({
   postList: [],
   addPost: () => {},
   deletePost: () => {},
+  addLike: () => {},
 });
 
 const postListReducer = (currPostList, action) => {
-  let newPostList = currPostList;
+  let newPostList = [...currPostList]; // Re rendering twice because of strictmode.
 
   if (action.type === "DELETE_POST") {
+    console.log("deleted");
     newPostList = currPostList.filter(
       (post) => post.id !== action.payload.postID
     );
-  }
-  else if (action.type === "ADD_POST") {
+  } else if (action.type === "ADD_POST") {
     const id = currPostList[currPostList.length - 1].id + 1;
     const newPost = action.payload;
     newPost.id = id;
     newPost.likes = 0;
     newPostList = [newPost, ...currPostList];
+  } else if (action.type === "ADD_LIKE") {
+    for (let i = 0; i < newPostList.length; i++) {
+      if (action.payload.postID === newPostList[i].id) {
+        newPostList[i].likes = newPostList[i].likes + 1;
+      }
+    }
   }
 
   return newPostList;
@@ -71,8 +78,17 @@ export default function PostListProvider({ children }) {
     });
   };
 
+  const addLike = (postID) => {
+    dispatchPostList({
+      type: "ADD_LIKE",
+      payload: {
+        postID,
+      },
+    });
+  };
+
   return (
-    <PostList.Provider value={{ postList, addPost, deletePost }}>
+    <PostList.Provider value={{ postList, addPost, deletePost, addLike }}>
       {children}
     </PostList.Provider>
   );

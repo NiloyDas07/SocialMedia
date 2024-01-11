@@ -3,7 +3,9 @@ import { FcLike } from "react-icons/fc";
 import { PostList } from "../store/post-list-store";
 
 export default function Post({ post }) {
-  const { deletePost } = useContext(PostList);
+  const { deletePost, addLike } = useContext(PostList);
+
+  const handleClick = () => {}
 
   return (
     <center>
@@ -18,7 +20,7 @@ export default function Post({ post }) {
             </span>
             <span
               className="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-light"
-              style={{ color: "rgb(49, 48, 48)" }}
+              style={{ color: "rgb(49, 48, 48)", cursor: "pointer" }}
               onClick={() => deletePost(post.id)}
             >
               X
@@ -33,6 +35,7 @@ export default function Post({ post }) {
               justifyContent: "center",
               alignItems: "center",
             }}
+            onClick={() => addLike(post.id)}
           >
             <p style={{ margin: "0" }}>Like </p> <FcLike />
           </a>
