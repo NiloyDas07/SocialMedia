@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { PostList } from "../store/post-list-store";
 
 export default function CreatePost() {
@@ -19,7 +19,20 @@ export default function CreatePost() {
     postBodyElement.current.value = "";
     tagsElement.current.value = "";
 
-    addPost(postTitle, postBody, tags);
+    fetch("https://dummyjson.com/posts/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: 5,
+        title: postTitle,
+        body: postBody,
+        tags,
+      }),
+    })
+      .then((res) => res.json())
+      .then((post) => {
+        addPost(post);
+      });
   };
 
   return (

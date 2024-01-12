@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 
 export const PostList = createContext({
   connect: () => {},
@@ -12,14 +12,11 @@ const postListReducer = (currPostList, action) => {
   let newPostList = [...currPostList]; // Re rendering twice because of strictmode.
 
   if (action.type === "DELETE_POST") {
-    console.log("deleted");
     newPostList = currPostList.filter(
       (post) => post.id !== action.payload.postID
     );
   } else if (action.type === "ADD_POST") {
-    const id = currPostList[currPostList.length - 1].id + 1;
     const newPost = action.payload;
-    newPost.id = id;
     newPost.reactions = 0;
     newPostList = [newPost, ...currPostList];
   } else if (action.type === "ADD_LIKE") {
@@ -38,6 +35,8 @@ const postListReducer = (currPostList, action) => {
 export default function PostListProvider({ children }) {
   const [postList, dispatchPostList] = useReducer(postListReducer, []);
 
+  const [fetching, setFetching] = useState(false);
+
   const connect = (posts) => {
     dispatchPostList({
       type: "FETCH_POST_LIST",
@@ -45,14 +44,10 @@ export default function PostListProvider({ children }) {
     });
   };
 
-  const addPost = (postTitle, postBody, tags) => {
+  const addPost = (post) => {
     dispatchPostList({
       type: "ADD_POST",
-      payload: {
-        title: postTitle,
-        body: postBody,
-        tags,
-      },
+      payload: post,
     });
   };
 
@@ -74,9 +69,27 @@ export default function PostListProvider({ children }) {
     });
   };
 
+  useEffect(() => {
+    setFetching(true);
+
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    fetch("https://dummyjson.com/posts", { signal })
+      .then((res) => res.json())
+      .then((data) => {
+        connect(data.posts);
+        setFetching(false);
+      });
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
   return (
     <PostList.Provider
-      value={{ connect, postList, addPost, deletePost, addLike }}
+      value={{ fetching, postList, addPost, deletePost, addLike }}
     >
       {children}
     </PostList.Provider>
