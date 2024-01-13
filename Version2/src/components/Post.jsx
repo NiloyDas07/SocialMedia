@@ -5,11 +5,9 @@ import { PostList } from "../store/post-list-store";
 export default function Post({ post }) {
   const { deletePost, addLike } = useContext(PostList);
 
-  const handleClick = () => {};
-
   return (
     <center>
-      <div className="card" style={{ width: "18rem" }}>
+      <div className="card" style={{ width: "80%" }}>
         {post.img && <img src={post.img} className="card-img-top" alt="..." />}
 
         <div className="card-body">
@@ -27,8 +25,7 @@ export default function Post({ post }) {
             </span>
           </h5>
           <p className="card-text">{post.body}</p>
-          <a
-            href="#"
+          <button
             className="btn"
             style={{
               display: "flex",
@@ -38,7 +35,7 @@ export default function Post({ post }) {
             onClick={() => addLike(post.id)}
           >
             <p style={{ margin: "0" }}>Like </p> <FcLike />
-          </a>
+          </button>
           <p>
             {post.tags.map((tag) => (
               <span key={tag} className="badge text-bg-light">
