@@ -20,8 +20,9 @@ const Sidebar = () => {
         <li className="nav-item">
           <NavLink
             to="/"
-            activeClassName="active"
-            className={"nav-link text-white"}
+            className={({ isActive }) =>
+              `${isActive && "active"} nav-link text-white`
+            }
             aria-current="page"
           >
             <svg className="bi pe-none me-2" width="16" height="16">
@@ -33,8 +34,9 @@ const Sidebar = () => {
         <li>
           <NavLink
             to="create-post"
-            activeClassName="active"
-            className={"nav-link text-white"}
+            className={({ isActive }) =>
+              `${isActive && "active"} nav-link text-white`
+            }
           >
             <svg className="bi pe-none me-2" width="16" height="16">
               <use xlinkHref="#speedometer2"></use>
