@@ -1,0 +1,50 @@
+import { useContext } from "react";
+import { FcLike } from "react-icons/fc";
+import { PostList } from "../store/post-list-store";
+
+export default function Post({ post }) {
+  const { deletePost, addLike } = useContext(PostList);
+
+  return (
+    <center>
+      <div className="card" style={{ width: "80%" }}>
+        {post.img && <img src={post.img} className="card-img-top" alt="..." />}
+
+        <div className="card-body">
+          <h5 className="card-title">
+            {post.title}
+            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {post.reactions}
+            </span>
+            <span
+              className="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-light"
+              style={{ color: "rgb(49, 48, 48)", cursor: "pointer" }}
+              onClick={() => deletePost(post.id)}
+            >
+              X
+            </span>
+          </h5>
+          <p className="card-text">{post.body}</p>
+          <button
+            className="btn"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onClick={() => addLike(post.id)}
+          >
+            <p style={{ margin: "0" }}>Like </p> <FcLike />
+          </button>
+          <p>
+            {post.tags.map((tag) => (
+              <span key={tag} className="badge text-bg-light">
+                #{tag}
+              </span>
+            ))}
+          </p>
+        </div>
+      </div>
+    </center>
+  );
+}
